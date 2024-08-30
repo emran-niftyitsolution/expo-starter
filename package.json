@@ -6,7 +6,6 @@
     "start": "expo start",
     "predev": "rimraf .expo",
     "dev": "expo start -c",
-    "reset-project": "node ./scripts/reset-project.js",
     "test": "jest --watchAll",
     "lint": "expo lint"
   },
