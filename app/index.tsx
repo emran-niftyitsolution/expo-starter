@@ -1,14 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Redirect } from "expo-router";
+import React from "react";
 
 const RootScreen = () => {
-  return (
-    <View>
-      <Text>RootScreen</Text>
-    </View>
-  )
-}
+  return <Redirect href={"/sign-in"} />;
+};
 
-export default RootScreen
-
-const styles = StyleSheet.create({})
+export default RootScreen;
