@@ -128,7 +128,7 @@ const InputField: React.FC<InputFieldProps> = ({
         return (
           <View
             className={cn(
-              "flex-row items-center rounded-md border px-4 py-3 shadow-md focus:border-blue-500",
+              "flex-row items-center rounded-lg border px-4 py-3 shadow-md focus:border-blue-500",
               className,
             )}
           >
@@ -176,7 +176,7 @@ const InputField: React.FC<InputFieldProps> = ({
             value={value}
             onValueChange={onChange}
             color={value ? "#3b82f6" : undefined}
-            className={cn(className)}
+            className={cn("rounded-md", className)}
           />
         );
 

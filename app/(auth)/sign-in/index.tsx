@@ -5,6 +5,10 @@ import SignInForm from "./components/signin-form";
 const SignInScreen = () => {
   return (
     <KeyboardAvoidingWrapper>
+      {/* <LinearGradient
+        colors={["#f2fcfe", "#1caad2"]}
+        style={{ flex: 1}}
+      > */}
       <View className="p-5 pt-36">
         <View>
           <Text className="text-4xl font-bold">Login </Text>
@@ -14,6 +18,7 @@ const SignInScreen = () => {
         </View>
         <SignInForm />
       </View>
+      {/* </LinearGradient> */}
     </KeyboardAvoidingWrapper>
   );
 };
