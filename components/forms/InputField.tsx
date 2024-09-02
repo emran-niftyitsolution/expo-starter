@@ -1,5 +1,6 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Slider from "@react-native-community/slider";
+import Checkbox from "expo-checkbox";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import { Control, Controller } from "react-hook-form";
@@ -43,7 +44,8 @@ interface InputFieldProps {
     | "time"
     | "url"
     | "week"
-    | "button";
+    | "button"
+    | "switch";
   options?: { label: string; value: any }[]; // For select dropdown
   mode?: "date" | "time" | "datetime"; // For DateTimePicker
   imageSrc?: string; // For image type input
@@ -52,6 +54,7 @@ interface InputFieldProps {
   onReset?: () => void; // For reset button
   onSubmit?: () => void; // For submit button
   onFileSelect?: (file: any) => void; // For file type input
+  className?: string; // New prop for custom class name
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -68,8 +71,10 @@ const InputField: React.FC<InputFieldProps> = ({
   rightIcon,
   onReset,
   onSubmit,
+  className, // Destructure the new className prop
 }) => {
   const [showPicker, setShowPicker] = useState(false);
+  const buttonTypes = ["button", "submit", "reset"];
 
   const handleDateChange =
     (onChange: (date: Date) => void) => (event: any, selectedDate?: Date) => {
@@ -121,7 +126,12 @@ const InputField: React.FC<InputFieldProps> = ({
       case "password":
       case "number":
         return (
-          <View className="flex-row items-center rounded-md border px-4 py-3 shadow-md focus:border-blue-500">
+          <View
+            className={cn(
+              "flex-row items-center rounded-md border px-4 py-3 shadow-md focus:border-blue-500",
+              className,
+            )}
+          >
             {leftIcon && <View className="mr-2">{leftIcon()}</View>}
             <TextInput
               className={cn(
@@ -151,8 +161,24 @@ const InputField: React.FC<InputFieldProps> = ({
           </View>
         );
 
+      case "switch":
+        return (
+          <Switch
+            value={value}
+            onValueChange={onChange}
+            className={cn(className)}
+          />
+        );
+
       case "checkbox":
-        return <Switch value={value} onValueChange={onChange} />;
+        return (
+          <Checkbox
+            value={value}
+            onValueChange={onChange}
+            color={value ? "#3b82f6" : undefined}
+            className={cn(className)}
+          />
+        );
 
       case "range":
         return (
@@ -162,7 +188,7 @@ const InputField: React.FC<InputFieldProps> = ({
             minimumValue={0}
             maximumValue={100}
             step={1}
-            className="h-10 w-full"
+            className={cn("h-10 w-full", className)}
           />
         );
 
@@ -170,8 +196,16 @@ const InputField: React.FC<InputFieldProps> = ({
       case "time":
         return (
           <>
-            <Pressable onPress={() => setShowPicker(true)}>
-              <View className="flex-row items-center rounded-md border px-4 py-3 shadow-md focus:border-blue-500">
+            <Pressable
+              onPress={() => setShowPicker(true)}
+              className={cn(className)}
+            >
+              <View
+                className={cn(
+                  "flex-row items-center rounded-md border px-4 py-3 shadow-md focus:border-blue-500",
+                  className,
+                )}
+              >
                 {leftIcon && <View className="mr-2">{leftIcon()}</View>}
                 <TextInput
                   className="flex-1"
@@ -189,6 +223,7 @@ const InputField: React.FC<InputFieldProps> = ({
                 mode={mode}
                 display="default"
                 onChange={handleDateChange(onChange)}
+                className={cn(className)}
               />
             )}
           </>
@@ -198,7 +233,7 @@ const InputField: React.FC<InputFieldProps> = ({
         return (
           <Pressable
             onPress={() => handleImagePicker(onChange)}
-            className="flex items-center justify-center"
+            className={cn("flex items-center justify-center", className)}
           >
             {value ? (
               <Image
@@ -222,6 +257,7 @@ const InputField: React.FC<InputFieldProps> = ({
               type === "reset"
                 ? "bg-gray-600 hover:bg-gray-700 active:bg-gray-800"
                 : "bg-blue-600 hover:bg-blue-700 active:bg-blue-800",
+              className,
             )}
           >
             <Text className="text-center text-white">
@@ -236,7 +272,7 @@ const InputField: React.FC<InputFieldProps> = ({
   };
 
   return (
-    <View className="mb-6">
+    <View className={cn("mb-6", className)}>
       <Controller
         control={control}
         name={name}
@@ -246,17 +282,15 @@ const InputField: React.FC<InputFieldProps> = ({
           fieldState: { error },
         }) => (
           <>
-            {label && (
+            {label && !buttonTypes.includes(type) && (
               <Text className="mb-2 text-lg font-semibold text-gray-800">
                 {label}
               </Text>
             )}
-            {/* <View className="flex-1"> */}
             {renderInput({ onChange, onBlur, value, error })}
             {error && (
               <Text className="mt-1 text-red-500">{error.message}</Text>
             )}
-            {/* </View> */}
           </>
         )}
       />
